@@ -4,7 +4,7 @@ MLDM Research Methodology
 Research Paper: (still searching)
 
 Group Members:
-Jayden Tan
-Yuhsaku Nakai
-Huong Dang Cao 
-Pham Tuan Hiep
+- Jayden Tan
+- Yuhsaku Nakai
+- Huong Dang Cao 
+- Pham Tuan Hiep
