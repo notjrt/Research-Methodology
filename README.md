@@ -1,9 +1,10 @@
 # Research-Methodology
 MLDM Research Methodology
 
-Research Paper: (still searching)
+### Research Paper 
+(still searching)
 
-Group Members:
+### Group Members
 - Jayden Tan
 - Yuhsaku Nakai
 - Huong Dang Cao 
