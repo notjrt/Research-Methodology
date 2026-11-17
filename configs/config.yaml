@@ -5,8 +5,8 @@ project:
   authors:
     - "Jayden Tan"
     - "Yuhsaku Nakai"
-    - "Phuong Dang Cao"
-    - "Tuan Hiep Pham"
+    - "Huong Dang Cao"
+    - "Pham Tuan Hiep"
 
 data:
   dataset_name: "OCT2017"
@@ -39,10 +39,8 @@ feature_extraction:
 
 training:
   random_seed: 42
-  validation_split:
-    type: "stratified_kfold"
-    n_splits: 5
-    holdout_val_size: 0.15
+  validation_strategy: "5_fold_stratified_cv"
+  n_splits: 5
   pca:
     n_components: 150
   smote:
@@ -61,6 +59,3 @@ training:
 
 explainability:
   shap_max_display: 15
-  attention_rollout:
-    head_fusion: "mean"
-    discard_ratio: 0.9

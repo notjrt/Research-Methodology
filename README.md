@@ -24,16 +24,16 @@ Raw OCT Image
 [2] Frozen ViT Feature Extraction (768-D)
    │
    ▼
-[3] Stratified Train / Validation Split (Leak-Free)
+[3] 5-Fold Stratified Cross-Validation Partition (Leak-Free)
    │
    ▼
-[4] PCA Dimensionality Reduction (150-D)
+[4] PCA Dimensionality Reduction (150-D, fitted on fold train)
    │
    ▼
-[5] Latent SMOTE Balancing (Applied strictly on train set)
+[5] Latent SMOTE Balancing (Applied strictly on fold train)
    │
    ▼
-[6] XGBoost Multi-Class Classification & Evaluation
+[6] Tuned XGBoost Classification & 1,000-Image Benchmark Evaluation
 ```
 
 ---
