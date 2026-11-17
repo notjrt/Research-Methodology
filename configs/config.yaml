@@ -1,0 +1,66 @@
+project:
+  name: "retinal-oct-hybrid-vit-xgboost"
+  version: "1.0.0"
+  description: "Hybrid Vision Transformer and Gradient Boosting Framework for Retinal Optical Coherence Tomography Classification"
+  authors:
+    - "Jayden Tan"
+    - "Yuhsaku Nakai"
+    - "Phuong Dang Cao"
+    - "Tuan Hiep Pham"
+
+data:
+  dataset_name: "OCT2017"
+  data_dir: "./OCT2017"
+  classes:
+    - "CNV"
+    - "DME"
+    - "DRUSEN"
+    - "NORMAL"
+  image_size: [224, 224]
+  clahe:
+    clip_limit: 2.0
+    tile_grid_size: [8, 8]
+  normalization:
+    mean: [0.485, 0.456, 0.406]
+    std: [0.229, 0.224, 0.225]
+
+feature_extraction:
+  backbone: "vit_base_patch16_224"
+  pretrained: true
+  freeze_weights: true
+  embedding_dim: 768
+  batch_size: 128
+  num_workers: 4
+  export_paths:
+    train_features: "outputs/features/X_train_raw.npy"
+    train_labels: "outputs/features/y_train_raw.npy"
+    test_features: "outputs/features/X_test_raw.npy"
+    test_labels: "outputs/features/y_test_raw.npy"
+
+training:
+  random_seed: 42
+  validation_split:
+    type: "stratified_kfold"
+    n_splits: 5
+    holdout_val_size: 0.15
+  pca:
+    n_components: 150
+  smote:
+    k_neighbors: 5
+  xgboost:
+    objective: "multi:softprob"
+    num_class: 4
+    n_estimators: 500
+    max_depth: 6
+    learning_rate: 0.05
+    subsample: 0.8
+    colsample_bytree: 0.8
+    reg_lambda: 1.5
+    early_stopping_rounds: 30
+    eval_metric: "mlogloss"
+
+explainability:
+  shap_max_display: 15
+  attention_rollout:
+    head_fusion: "mean"
+    discard_ratio: 0.9
