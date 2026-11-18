@@ -30,7 +30,7 @@ feature_extraction:
   freeze_weights: true
   embedding_dim: 768
   batch_size: 128
-  num_workers: 4
+  num_workers: 0
   export_paths:
     train_features: "outputs/features/X_train_raw.npy"
     train_labels: "outputs/features/y_train_raw.npy"
@@ -56,6 +56,3 @@ training:
     reg_lambda: 1.5
     early_stopping_rounds: 30
     eval_metric: "mlogloss"
-
-explainability:
-  shap_max_display: 15

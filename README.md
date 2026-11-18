@@ -46,21 +46,18 @@ Research-Methodology/
 │   └── config.yaml             # Experiment hyperparameters & dataset paths
 ├── src/
 │   ├── data/
-│   │   ├── clahe_preprocessor.py # CLAHE enhancement & tensor normalization
-│   │   └── oct_dataset.py      # PyTorch Dataset loader
+│   │   └── clahe_preprocessor.py # CLAHE enhancement & tensor normalization
 │   ├── models/
 │   │   ├── vit_extractor.py    # Pretrained ViT feature extractor
 │   │   ├── dim_reduction.py    # PCA projection module
 │   │   ├── balancer.py         # Latent-space SMOTE balancer
 │   │   └── classifiers.py      # XGBoost and baseline models
-│   ├── explainability/
-│   │   └── shap_explainer.py   # TreeSHAP feature attribution
 │   ├── utils/
 │   │   ├── seed.py             # Reproducibility utilities
 │   │   └── metrics.py          # Multiclass evaluation metrics
 │   └── pipeline/
 │       ├── step1_extract_features.py # Feature extraction pipeline
-│       └── step2_train_evaluate.py   # Training & evaluation pipeline
+│       └── step2_train_evaluate.py   # 5-fold training & evaluation pipeline
 ├── requirements.txt            # Python dependencies
 ├── .gitignore                  # Git ignore rules
 └── README.md                   # Project documentation
@@ -118,7 +115,7 @@ python -m src.pipeline.step1_extract_features
 ```
 
 ### 2. Train & Evaluate (Fast on CPU, ~3-5 mins)
-Fits PCA, applies SMOTE on the training split, and trains the tuned XGBoost classifier:
+Executes 5-Fold Stratified Cross-Validation with PCA, latent-space SMOTE, and tuned XGBoost:
 ```bash
 python -m src.pipeline.step2_train_evaluate
 ```

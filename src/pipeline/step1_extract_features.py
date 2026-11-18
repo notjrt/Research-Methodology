@@ -1,18 +1,12 @@
-"""
-Step 1: Single-Pass Frozen ViT Feature Extraction
-Extracts 768-D deep latent embeddings from CLAHE-enhanced OCT scans and saves to .npy format.
-Designed to be executed once on a GPU (Google Colab or Local).
-"""
 import os
+import sys
 import glob
 import yaml
 import torch
 import numpy as np
 from tqdm import tqdm
 from torch.utils.data import Dataset, DataLoader
-from PIL import Image
 
-import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 from src.data.clahe_preprocessor import CLAHEPreprocessor
 from src.models.vit_extractor import FrozenViTExtractor
@@ -49,7 +43,7 @@ def extract_and_export(config_path="configs/config.yaml"):
 
     set_seed(config["training"]["random_seed"])
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"[+] Using compute device: {device}")
+    print(f"Device: {device}")
 
     preprocessor = CLAHEPreprocessor(
         clip_limit=config["data"]["clahe"]["clip_limit"],
@@ -66,21 +60,31 @@ def extract_and_export(config_path="configs/config.yaml"):
     classes = config["data"]["classes"]
     batch_size = config["feature_extraction"]["batch_size"]
 
+    num_workers = config["feature_extraction"].get("num_workers", 0)
+    if sys.platform == "win32" and device.type == "cpu":
+        num_workers = 0
+
     for split in ["train", "test"]:
         split_dir = os.path.join(data_dir, split)
         if not os.path.exists(split_dir):
-            print(f"[-] Split directory {split_dir} not found. Skipping...")
+            print(f"Directory not found: {split_dir}")
             continue
 
         dataset = SimpleOCTFolderDataset(split_dir, classes, preprocessor)
-        loader = DataLoader(dataset, batch_size=batch_size, shuffle=False, num_workers=2)
-        print(f"[+] Extracting features for {split} set ({len(dataset)} images)...")
+        loader = DataLoader(
+            dataset,
+            batch_size=batch_size,
+            shuffle=False,
+            num_workers=num_workers,
+            pin_memory=(device.type == "cuda")
+        )
+        print(f"Extracting {split} set ({len(dataset)} images)...")
 
         all_feats = []
         all_labels = []
 
         with torch.no_grad():
-            for imgs, lbls in tqdm(loader, desc=f"Extraction: {split}"):
+            for imgs, lbls in tqdm(loader, desc=f"{split}"):
                 imgs = imgs.to(device)
                 feats = model(imgs).cpu().numpy()
                 all_feats.append(feats)
@@ -95,7 +99,9 @@ def extract_and_export(config_path="configs/config.yaml"):
 
         np.save(out_feat_path, X)
         np.save(out_lbl_path, y)
-        print(f"[✓] Saved {split} features ({X.shape}) to {out_feat_path}")
+        print(f"Saved {split}: {out_feat_path} ({X.shape})")
 
 if __name__ == "__main__":
+    import multiprocessing
+    multiprocessing.freeze_support()
     extract_and_export()
