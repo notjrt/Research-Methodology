@@ -1,5 +1,4 @@
 # Hybrid Vision Transformer and Gradient Boosting for Retinal OCT Classification
----
 
 ## Authors
 - **Jayden Tan**
