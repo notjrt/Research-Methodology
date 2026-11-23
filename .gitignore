@@ -35,7 +35,10 @@ ENV/
 env.bak/
 venv.bak/
 
-# Jupyter Notebook checkpoints
+# Jupyter Notebooks & PDF documents & Local ablation scripts
+*.ipynb
+*.pdf
+src/pipeline/step3_ablation_and_figures.py
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
 
@@ -48,7 +51,7 @@ venv.bak/
 
 # Project large data files & caches (CRITICAL: Do not track large dataset in git)
 OCT2017/
-data/
+/data/
 raw_data/
 *.npy
 *.npz
