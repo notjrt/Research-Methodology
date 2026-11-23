@@ -1,9 +1,5 @@
 # Hybrid Vision Transformer and Gradient Boosting for Retinal OCT Classification
 
-Official research repository for the Master in Machine Learning and Data Mining (MLDM) — Semester 1 Research Methodology, Université Jean Monnet (UJM).
-
----
-
 ## Authors
 - **Jayden Tan**
 - **Yuhsaku Nakai**
